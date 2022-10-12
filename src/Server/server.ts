@@ -1,12 +1,13 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
+import productRoutes from "../routes/product_router";
 
 class Server {
   private _app: express.Application;
   private _port: string;
 
   private _paths = {
-    users: "/api/users",
+    product: "/api/product",
   };
   constructor() {
     // aplicacion de express
@@ -34,9 +35,7 @@ class Server {
 
   // ruteo
   private routes() {
-    this._app.use(this._paths.users, async (req: Request, res: Response) => {
-      res.send("hola");
-    });
+    this._app.use(this._paths.product, productRoutes);
     // this._app.use(this._paths.users, tokenValidator ,userController)
   }
 
