@@ -1,10 +1,16 @@
+import { PrismaClient } from "@prisma/client";
 import { Router } from "express";
 import { Request, Response } from "express";
 
 const router = Router();
+
+const prisma = new PrismaClient();
+
 // todas empiezan con /product
-router.get("/all", (req: Request, res: Response) => {
-  res.send("Todos los productos");
+router.get("/all", async (req: Request, res: Response) => {
+  const result = await prisma.product.findMany();
+
+  res.json(result);
 });
 
 router.get("/:id", (req: Request, res: Response) => {
