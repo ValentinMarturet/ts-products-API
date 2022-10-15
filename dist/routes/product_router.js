@@ -15,20 +15,57 @@ const router = (0, express_1.Router)();
 const prisma = new client_1.PrismaClient();
 // todas empiezan con /product
 router.get("/all", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma.product.findMany();
-    res.json(result);
+    try {
+        const result = yield prisma.product.findMany();
+        res.json(result);
+    }
+    catch (e) {
+        res.send("Ha ocurrido un error: " + e);
+    }
 }));
-router.get("/:id", (req, res) => {
+router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    res.send("producto de id: " + id);
-});
-router.post("/", (req, res) => {
+    try {
+        const result = yield prisma.product.findFirst({
+            where: { id },
+        });
+        res.json(result);
+    }
+    catch (e) {
+        res.send("Producto no existe. ID: " + id);
+    }
+}));
+router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // nuevo producto creado
-    res.send("nuevo producto creado");
-});
-router.delete("/:id", (req, res) => {
-    const { id } = req.params;
-    res.send("producto de id: " + id + " eliminado.");
+    const { name, price, stock, sizes, description, tags } = req.body;
+    try {
+        const product = yield prisma.product.create({
+            data: {
+                name,
+                price,
+                stock,
+                sizes,
+                description,
+                tags,
+            },
+        });
+        res.json(product);
+    }
+    catch (e) {
+        res.send("Error al crear el producto: " + e);
+    }
+}));
+router.delete("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.body;
+    try {
+        const result = yield prisma.product.delete({
+            where: { id },
+        });
+        res.json(result);
+    }
+    catch (e) {
+        res.send("Ha ocurrido un error al eliminar el producto: " + e);
+    }
     // IMPORTANTE: debe autenticar al ususario y chequear que sea admin
-});
+}));
 exports.default = router;

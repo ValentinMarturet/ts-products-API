@@ -8,24 +8,56 @@ const prisma = new PrismaClient();
 
 // todas empiezan con /product
 router.get("/all", async (req: Request, res: Response) => {
-  const result = await prisma.product.findMany();
-
-  res.json(result);
+  try {
+    const result = await prisma.product.findMany();
+    res.json(result);
+  } catch (e) {
+    res.send("Ha ocurrido un error: " + e);
+  }
 });
 
-router.get("/:id", (req: Request, res: Response) => {
+router.get("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
-  res.send("producto de id: " + id);
+  try {
+    const result = await prisma.product.findFirst({
+      where: { id },
+    });
+    res.json(result);
+  } catch (e) {
+    res.send("Producto no existe. ID: " + id);
+  }
 });
 
-router.post("/", (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response) => {
   // nuevo producto creado
-  res.send("nuevo producto creado");
+  const { name, price, stock, sizes, description, tags } = req.body;
+  try {
+    const product = await prisma.product.create({
+      data: {
+        name,
+        price,
+        stock,
+        sizes,
+        description,
+        tags,
+      },
+    });
+    res.json(product);
+  } catch (e) {
+    res.send("Error al crear el producto: " + e);
+  }
 });
 
-router.delete("/:id", (req: Request, res: Response) => {
-  const { id } = req.params;
-  res.send("producto de id: " + id + " eliminado.");
+router.delete("/", async (req: Request, res: Response) => {
+  const { id } = req.body;
+  try {
+    const result = await prisma.product.delete({
+      where: { id },
+    });
+    res.json(result);
+  } catch (e) {
+    res.send("Ha ocurrido un error al eliminar el producto: " + e);
+  }
 
   // IMPORTANTE: debe autenticar al ususario y chequear que sea admin
 });
