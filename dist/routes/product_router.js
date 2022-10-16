@@ -55,6 +55,36 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.send("Error al crear el producto: " + e);
     }
 }));
+router.put("/stock", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id, stockChange } = req.body;
+    try {
+        if (stockChange > 0) {
+            const result = yield prisma.product.update({
+                where: { id },
+                data: {
+                    stock: {
+                        increment: stockChange,
+                    },
+                },
+            });
+            res.json(result);
+        }
+        else {
+            const result = yield prisma.product.update({
+                where: { id },
+                data: {
+                    stock: {
+                        increment: stockChange,
+                    },
+                },
+            });
+            res.json(result);
+        }
+    }
+    catch (e) {
+        res.send("Error al cambiar el stock del producto de ID: " + id + "Error: " + e);
+    }
+}));
 router.delete("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.body;
     try {

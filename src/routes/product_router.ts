@@ -48,6 +48,37 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
+router.put("/stock", async (req: Request, res: Response) => {
+  const { id, stockChange } = req.body;
+  try {
+    if (stockChange > 0) {
+      const result = await prisma.product.update({
+        where: { id },
+        data: {
+          stock: {
+            increment: stockChange,
+          },
+        },
+      });
+      res.json(result);
+    } else {
+      const result = await prisma.product.update({
+        where: { id },
+        data: {
+          stock: {
+            increment: stockChange,
+          },
+        },
+      });
+      res.json(result);
+    }
+  } catch (e) {
+    res.send(
+      "Error al cambiar el stock del producto de ID: " + id + "Error: " + e
+    );
+  }
+});
+
 router.delete("/", async (req: Request, res: Response) => {
   const { id } = req.body;
   try {
