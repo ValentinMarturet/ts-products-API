@@ -8,6 +8,7 @@ const prisma = new PrismaClient();
 
 // todas empiezan con /product
 router.get("/all", async (req: Request, res: Response) => {
+  // Devuelve una lista con todos los productos
   try {
     const result = await prisma.product.findMany();
     res.json(result);
@@ -17,6 +18,7 @@ router.get("/all", async (req: Request, res: Response) => {
 });
 
 router.get("/:id", async (req: Request, res: Response) => {
+  // Devuelve un producto especifico
   const { id } = req.params;
   try {
     const result = await prisma.product.findFirst({
@@ -29,7 +31,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
-  // nuevo producto creado
+  // Crear un nuevo producto
   const { name, price, stock, sizes, description, tags } = req.body;
   try {
     const product = await prisma.product.create({
@@ -49,6 +51,7 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 router.put("/stock", async (req: Request, res: Response) => {
+  // recibe stockChange como valor numerico positivo o negativo, esa es la variación en el stock anterior
   const { id, stockChange } = req.body;
   try {
     if (stockChange > 0) {
