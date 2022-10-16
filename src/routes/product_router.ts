@@ -79,6 +79,24 @@ router.put("/stock", async (req: Request, res: Response) => {
   }
 });
 
+router.put("/", async (req: Request, res: Response) => {
+  //actualiza los datos de un producto
+  const { id, changes } = req.body;
+  try {
+    const result = await prisma.product.update({
+      where: { id },
+      data: {
+        ...changes,
+      },
+    });
+    res.json(result);
+  } catch (e) {
+    res.send(
+      "Error al cambiar datos del producto de ID: " + id + "Error: " + e
+    );
+  }
+});
+
 router.delete("/", async (req: Request, res: Response) => {
   const { id } = req.body;
   try {
