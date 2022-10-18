@@ -7,6 +7,7 @@ const router = Router();
 const prisma = new PrismaClient();
 
 // todas empiezan con /product
+// getAllProducts
 router.get("/all", async (req: Request, res: Response) => {
   // Devuelve una lista con todos los productos
   try {
@@ -17,6 +18,7 @@ router.get("/all", async (req: Request, res: Response) => {
   }
 });
 
+// getProductById
 router.get("/:id", async (req: Request, res: Response) => {
   // Devuelve un producto especifico
   const { id } = req.params;
@@ -30,6 +32,7 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
+//createProduct
 router.post("/", async (req: Request, res: Response) => {
   // Crear un nuevo producto
   const { name, price, stock, sizes, description, tags } = req.body;
@@ -50,6 +53,7 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
+// updateStock
 router.put("/stock", async (req: Request, res: Response) => {
   // recibe stockChange como valor numerico positivo o negativo, esa es la variación en el stock anterior
   const { id, stockChange } = req.body;
@@ -82,6 +86,7 @@ router.put("/stock", async (req: Request, res: Response) => {
   }
 });
 
+// updateProductDetails
 router.put("/", async (req: Request, res: Response) => {
   //actualiza los datos de un producto
   const { id, changes } = req.body;
@@ -100,6 +105,7 @@ router.put("/", async (req: Request, res: Response) => {
   }
 });
 
+// deleteProduct
 router.delete("/", async (req: Request, res: Response) => {
   const { id } = req.body;
   try {

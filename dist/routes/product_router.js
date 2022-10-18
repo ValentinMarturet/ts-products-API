@@ -14,7 +14,9 @@ const express_1 = require("express");
 const router = (0, express_1.Router)();
 const prisma = new client_1.PrismaClient();
 // todas empiezan con /product
+// getAllProducts
 router.get("/all", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Devuelve una lista con todos los productos
     try {
         const result = yield prisma.product.findMany();
         res.json(result);
@@ -23,7 +25,9 @@ router.get("/all", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.send("Ha ocurrido un error: " + e);
     }
 }));
+// getProductById
 router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Devuelve un producto especifico
     const { id } = req.params;
     try {
         const result = yield prisma.product.findFirst({
@@ -35,8 +39,9 @@ router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.send("Producto no existe. ID: " + id);
     }
 }));
+//createProduct
 router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // nuevo producto creado
+    // Crear un nuevo producto
     const { name, price, stock, sizes, description, tags } = req.body;
     try {
         const product = yield prisma.product.create({
@@ -55,7 +60,9 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.send("Error al crear el producto: " + e);
     }
 }));
+// updateStock
 router.put("/stock", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // recibe stockChange como valor numerico positivo o negativo, esa es la variación en el stock anterior
     const { id, stockChange } = req.body;
     try {
         if (stockChange > 0) {
@@ -85,6 +92,7 @@ router.put("/stock", (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.send("Error al cambiar el stock del producto de ID: " + id + "Error: " + e);
     }
 }));
+// updateProductDetails
 router.put("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //actualiza los datos de un producto
     const { id, changes } = req.body;
@@ -99,6 +107,7 @@ router.put("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.send("Error al cambiar datos del producto de ID: " + id + "Error: " + e);
     }
 }));
+// deleteProduct
 router.delete("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.body;
     try {
